@@ -1,0 +1,238 @@
+{# {% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="username">Email</label>
+        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+        <label for="password">Password</label>
+        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+
+        
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Remember me
+                </label>
+            </div>
+       
+
+        <button class="btn btn-lg btn-primary" type="submit">
+            Sign in
+        </button>
+    </form>
+{% endblock %} #}
+{% extends 'home/home.html.twig' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block body %}
+<header id="header" class="header fixed-top d-flex align-items-center"
+    style="box-shadow: 0 0 30px 10px rgba(0, 0, 0, 0.1);">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+
+        <a href="{{path('principal')}}" class="logo d-flex align-items-center me-auto me-xl-0">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="assets/img/logo.png" alt=""> -->
+            <h1>Tomás Romero Pinturas</h1>
+            <span></span>
+        </a>
+
+        <!-- Nav Menu -->
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{{path('principal')}}" class="active"><img src="{{ asset('static/img/casaroja.png') }}"
+                            alt="Inicio" class="icono" width="28px" height="28px">Inicio</a></li>
+                {# {% if is_granted('ROLE_ADMIN') %} #}
+                {# <li><a href="{{path('admin')}}" class=""><img src="{{ asset('static/img/configuracionroja.png') }}"
+                alt="Inicio" class="icono" width="28px" height="28px">Panel de Administrador</a>
+          </li> #}
+                {# {% endif %} #}
+                {% if is_granted('ROLE_GUIA') %}
+                <ul>
+                    <li class="dropdown has-dropdown"><a class="">Menú Guía</a>
+                        <ul class="dd-box-shadow" style="right: 0; left: auto;">
+                            <li><a href="{{path('calendarioGuia')}}"><img src="{{ asset('static/img/usuario.png') }}"
+                                        alt="Inicio" class="icono" width="28px" height="28px">Mi Calendario</a></li>
+                            <li><a href="{{path('informes')}}"><img src="{{ asset('static/img/cerrar-sesion.png') }}"
+                                        alt="Inicio" class="icono" width="28px" height="28px">Informes</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
+                <li><a href="{{path('listadoReservas')}}" class="">Mis Reservas</a></li>
+                {% endif %}
+                {# <li><a href="{{path('admin')}}" class=""><img src="{{ asset('static/img/buscarroja.png') }}" alt="Inicio"
+                class="icono" width="28px" height="28px">Galería</a></li> #}
+            </ul>
+
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav><!-- End Nav Menu -->
+        {% if app.user %}
+        <div class="navmenu">
+
+            <ul>
+                <li class="dropdown has-dropdown"><a class="">Hola, {{app.user}}</a>
+                    <ul class="dd-box-shadow" style="right: 0; left: auto;">
+                        {# <li><a href="{{path('app_logout')}}"><img src="{{ asset('static/img/usuario.png') }}" alt="Inicio"
+                    class="icono" width="28px" height="28px">Mi Perfil</a></li> #}
+                        <li><a href="{{path('app_logout')}}"><img src="{{ asset('static/img/cerrar-sesion.png') }}"
+                                    alt="Inicio" class="icono" width="28px" height="28px">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {# <a class="active">Hola, {{app.user}}</a> #}
+
+        </div>
+        {% else %}
+        <div>
+            <a class="btn-getstarted" href="{{path('app_login')}}"><img src="{{ asset('static/img/accesoblanco.png') }}"
+                    alt="Inicio" class="icono mr-3" width="28px" height="28px"><span>Iniciar Sesión</span></a>
+            <a class="btn-getstarted" href="{{path('app_register')}}"><img
+                    src="{{ asset('static/img/usuariosblanco.png') }}" alt="Inicio" class="icono mr-3" width="28px"
+                    height="28px"><span>Registrarse</span></a>
+        </div>
+
+
+        {% endif %}
+        {# <ul>
+            <li>
+              <a class="btn-getstarted active" href="{{path('app_login')}}"><img src="{{ asset('static/img/accesoblanco.png') }}" alt="Inicio" class="icono" width="28px" height="28px">Iniciar Sesión</a>
+            </li>
+            <li>
+              <a class="btn-getstarted active" href="{{path('app_register')}}"><img src="{{ asset('static/img/buscarroja.png') }}" alt="Inicio" class="icono" width="28px" height="28px">Registrarse</a>
+            </li>
+          </ul> #}
+    </div>
+
+    {# <a class="btn-book-a-table" href="#book-a-table">Book a Table</a> #}
+    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+</header><!-- End Header -->
+
+<div class="container" style="margin-top: 150px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card">
+
+                <h3 class="text-center mt-4">Iniciar Sesión</h3>
+                <div class="card-body">
+                    <form method="post">
+                        {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                        {% endif %}
+
+                        {% if app.user %}
+                        <div class="mb-3">
+                            Hola, {{ app.user.nombre }}, <a href="{{ path('app_logout') }}">Cerrar Sesión</a>
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group mb-3">
+                            <label for="username">Email</label>
+                            <input type="email" value="{{ last_username }}" name="_username" id="username"
+                                class="form-control" autocomplete="email" required autofocus>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password">Contraseña</label>
+                            <input type="password" name="_password" id="password" class="form-control"
+                                autocomplete="current-password" required>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <input type="hidden" name="app_register" value="/register">
+
+                        <script async defer>
+                            function onSignIn(googleUser) {
+                                var profile = googleUser.getBasicProfile();
+                                console.log('ID: ' + profile
+                            .getId()); // Do not send to your backend! Use an ID token instead.
+                                console.log('Name: ' + profile.getName());
+                                console.log('Image URL: ' + profile.getImageUrl());
+                                console.log('Email: ' + profile
+                            .getEmail()); // This is null if the 'email' scope is not present.
+                            }
+                        </script>
+                        <script src="https://accounts.google.com/gsi/client" async defer></script>
+                        <div id="g_id_onload"
+                            data-client_id="565658862273-e7hveo9k26i3cbvo2052dv6jshoiqs9h.apps.googleusercontent.com"
+                            data-callback="handleCredentialResponse">
+                        </div>
+                        <div class="g_id_signin" data-type="standard"></div>
+                        <script async defer>
+                            // google.accounts.id.renderButton(document.getElementById("signinDiv"), {
+                            //     theme: 'outline',
+                            //     size: 'large',
+                            //     click_listener: onClickHandler
+                            // });
+
+                            // function onClickHandler() {
+                            //     console.log("Sign in with Google button clicked...")
+                            // }
+                            google.accounts.id.initialize({
+                                client_id: '565658862273-e7hveo9k26i3cbvo2052dv6jshoiqs9h.apps.googleusercontent.com',
+                                callback: handleCredentialResponse
+                            });
+
+                            function handleCredentialResponse(response) {
+                                // decodeJwtResponse() is a custom function defined by you
+                                // to decode the credential response.
+                                console.log(response.credential);
+                                const responsePayload = decodeJwtResponse(response.credential);
+
+                                console.log("ID: " + responsePayload.sub);
+                                console.log('Full Name: ' + responsePayload.name);
+                                console.log('Given Name: ' + responsePayload.given_name);
+                                console.log('Family Name: ' + responsePayload.family_name);
+                                console.log("Image URL: " + responsePayload.picture);
+                                console.log("Email: " + responsePayload.email);
+                            }
+
+                            function decodeJwtResponse(token) {
+                                var base64Url = token.split('.')[1];
+                                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                                var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+                                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                                }).join(''));
+
+                                return JSON.parse(jsonPayload);
+                            }
+                        </script>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary mb-3">Iniciar Sesión</button>
+                            <p>¿No tienes una cuenta? <a href="{{ path('app_register') }}">Regístrate</a></p>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
